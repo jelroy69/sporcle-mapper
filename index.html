@@ -1,2 +1,79 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <title>Rectangle Coordinates Generator</title>
+    <style>
+        #canvas {
+            width: 900px;
+            height: 900px;
+            border: 1px solid #000;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<label for="widthInput">Width:</label>
+<input type="number" id="widthInput" value="900">
+<label for="heightInput">Height:</label>
+<input type="number" id="heightInput" value="900"><br><br>
+
+<label for="rowsInput">Rows:</label>
+<input type="number" id="rowsInput" value="2">
+<label for="colsInput">Columns:</label>
+<input type="number" id="colsInput" value="2"><br><br>
+
+<button onclick="generateAndDisplay()">Generate Rectangles</button><br><br>
+
+<div id="canvas"></div>
+
+<script>
+function generateCoordinates() {
+    const width = parseInt(document.getElementById('widthInput').value);
+    const height = parseInt(document.getElementById('heightInput').value);
+    const rows = parseInt(document.getElementById('rowsInput').value);
+    const cols = parseInt(document.getElementById('colsInput').value);
+    
+    const stepX = width / cols;
+    const stepY = height / rows;
+
+    let coordinates = [];
+
+    for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+            let x1 = col * stepX;
+            let y1 = row * stepY;
+            let x2 = x1 + stepX;
+            let y2 = y1 + stepY;
+
+            coordinates.push([x1, y1]);
+            coordinates.push([x1, y2]);
+            coordinates.push([x2, y2]);
+            coordinates.push([x2, y1]);
+            coordinates.push([x1, y1]); // To complete the rectangle
+        }
+    }
+
+    return coordinates;
+}
+
+function generateAndDisplay() {
+    const canvas = document.getElementById('canvas');
+    canvas.innerHTML = ''; // Clear canvas
+
+    const rectangleCoordinates = generateCoordinates();
+    rectangleCoordinates.forEach(coord => {
+        const rect = document.createElement('div');
+        rect.style.position = 'absolute';
+        rect.style.left = coord[0] + 'px';
+        rect.style.top = coord[1] + 'px';
+        rect.style.width = (coord[2] - coord[0]) + 'px';
+        rect.style.height = (coord[5] - coord[1]) + 'px';
+        rect.style.border = '1px solid black';
+        canvas.appendChild(rect);
+    });
+}
+</script>
+
+</body>
+</html>
